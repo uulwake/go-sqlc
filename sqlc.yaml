@@ -1,0 +1,17 @@
+version: 1
+packages:
+  - path: "./models/items"
+    engine: "postgresql"
+    schema: "./schemas/items.schema.sql"
+    queries: "./queries/items.query.sql"
+    emit_json_tags: true
+  - path: "./models/orders"
+    engine: "postgresql"
+    schema: "./schemas/orders.schema.sql"
+    queries: "./queries/orders.query.sql"
+    emit_json_tags: true
+  - path: "./models/outbounds"
+    engine: "postgresql"
+    schema: "./schemas/outbounds.schema.sql"
+    queries: "./queries/outbounds.query.sql"
+    emit_json_tags: true

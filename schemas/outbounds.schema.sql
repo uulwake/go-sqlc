@@ -1,0 +1,8 @@
+CREATE TABLE outbounds (
+	id SERIAL PRIMARY KEY,
+	item_id INT NOT NULL,
+	order_id INT NOT NULL,
+	qty INT NOT NULL,
+	CONSTRAINT fk_items FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+	CONSTRAINT fk_orders FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE	
+)

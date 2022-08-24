@@ -1,0 +1,6 @@
+CREATE TABLE items (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(50) NOT NULL,
+	qty INT NOT NULL,
+	weight FLOAT NOT NULL
+);
