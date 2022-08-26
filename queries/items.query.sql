@@ -1,3 +1,6 @@
+-- name: CountTotalItems :one
+SELECT count(*) FROM items;
+
 -- name: GetItemById :one
 SELECT * FROM items WHERE id = $1;
 
