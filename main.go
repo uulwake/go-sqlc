@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"go-sqlc/models/items"
+	"go-sqlc/models/orders"
+	"go-sqlc/models/outbounds"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -79,5 +81,43 @@ func main() {
 	}
 
 	fmt.Println(total)
+
+	// create orders with transaction
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer tx.Rollback()
+
+	OrderRepo := orders.New(db)
+	orderTx := OrderRepo.WithTx(tx)
+
+	OutboundRepo := outbounds.New(db)
+	outboundTx := OutboundRepo.WithTx(tx)
+
+	orderParam := orders.CreateOrderParams{RecipientName: "New Name", RecipientAddress: "Addr", Shipper: "JNB"}
+	order, err := orderTx.CreateOrder(ctx, orderParam)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	outboundParam := outbounds.CreateOutboundParams{ItemID: itemsData[0].ID, OrderID: order.ID, Qty: 10}
+	err = outboundTx.CreateOutbound(ctx, outboundParam)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ordersData, err := OrderRepo.GetOrders(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(ordersData)
 
 }
